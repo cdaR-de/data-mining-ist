@@ -5,7 +5,11 @@ import numpy as np
 import os
 
 # Model yükleme
-model_path = "/Users/sidar/Downloads/best.pt"  # YOLOv8 ağırlık dosyanızın yolu
+model_path = "best.pt"  # YOLOv8 ağırlık dosyasının proje kökünde olduğunu varsayıyoruz
+if not os.path.exists(model_path):
+    st.error("Model dosyası bulunamadı! Lütfen 'best.pt' dosyasını proje dizinine ekleyin.")
+    st.stop()
+
 model = YOLO(model_path)
 
 # Arayüz Başlığı
@@ -25,7 +29,7 @@ with st.sidebar:
     st.header("Performans")
     with st.expander("Tıklayın: Model Performansı Görseli"):
         # Model performans görselini yükle ve göster
-        model_image_path = "/Users/sidar/Downloads/results.png"  # Model görsel yolu
+        model_image_path = "results.png"  # Performans görselinin proje kökünde olduğunu varsayıyoruz
         if os.path.exists(model_image_path):
             st.image(model_image_path, caption="Model Performansı")
         else:
@@ -46,12 +50,8 @@ if uploaded_file is not None:
     output_image = Image.fromarray(np.array(image))
     draw = ImageDraw.Draw(output_image)
 
-    # Yazı tipi ayarları
-    font_path = "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf"  # Sisteminizdeki yazı tipini seçin
-    if os.path.exists(font_path):
-        font = ImageFont.truetype(font_path, 20)
-    else:
-        font = ImageFont.load_default()
+    # Yazı tipi ayarları (Varsayılan yazı tipi kullanılacak)
+    font = ImageFont.load_default()
 
     predictions = []
     for box in detections:
@@ -72,8 +72,8 @@ if uploaded_file is not None:
         # Metni kutunun üst kısmına veya içerisine yaz
         text = f"{model.names[cls]} ({confidence:.2f})"
 
-        # Text bbox ile metin kutusunu al
-        text_bbox = draw.textbbox((x1, y1), text, font=font)  # Metin kutusunun boyutlarını al
+        # Metin kutusunun boyutlarını hesapla
+        text_bbox = draw.textbbox((x1, y1), text, font=font)
         text_width = text_bbox[2] - text_bbox[0]
         text_height = text_bbox[3] - text_bbox[1]
 
