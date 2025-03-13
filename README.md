@@ -58,4 +58,9 @@ The YOLO v8l model achieved the following results on the validation set:
 
 These results demonstrate the model's effectiveness in accurately identifying wonders from images.
 
+## Contributors  
+- [Senin Adın](https://github.com/cdaR-de)  
+- [Arkadaşının Adı](https://github.com/mmelzey)  
+
+
 ---
